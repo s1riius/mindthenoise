@@ -1,0 +1,36 @@
+
+CLK1 KD vs radiometric: n = 35, pairs = 595
+  median ratio-of-ratios 2.12-fold [1.02, 3.87]; mean r 0.70 [0.13, 1.35]
+  SD r 1.91 [1.38, 2.35] (sqrt2 x SD of D = 2.04); pairs >2-fold 0.74 [0.64, 0.81]; >10-fold 0.24 [0.11, 0.37]
+  null within-assay: SD r 0.71-1.12; >2-fold 0.33-0.56; >10-fold 0.00-0.04
+  null inter-lab: SD r 2.07-3.32; >2-fold 0.74-0.85; >10-fold 0.28-0.52
+
+DYRK1A KD vs radiometric: n = 33, pairs = 528
+  median ratio-of-ratios 2.71-fold [1.69, 5.96]; mean r 1.19 [0.55, 1.88]
+  SD r 1.94 [1.36, 2.40] (sqrt2 x SD of D = 2.27); pairs >2-fold 0.73 [0.64, 0.80]; >10-fold 0.29 [0.14, 0.44]
+  null within-assay: SD r 0.67-1.10; >2-fold 0.31-0.55; >10-fold 0.00-0.05
+  null inter-lab: SD r 2.03-3.34; >2-fold 0.74-0.85; >10-fold 0.28-0.53
+
+GSK-3b KD vs radiometric: n = 18, pairs = 153
+  median ratio-of-ratios 2.31-fold [1.54, 5.96]; mean r 1.04 [0.47, 1.58]
+  SD r 1.47 [0.98, 1.87] (sqrt2 x SD of D = 1.80); pairs >2-fold 0.67 [0.46, 0.83]; >10-fold 0.22 [0.04, 0.39]
+  null within-assay: SD r 0.59-1.20; >2-fold 0.24-0.59; >10-fold 0.00-0.07
+  null inter-lab: SD r 1.77-3.63; >2-fold 0.69-0.88; >10-fold 0.22-0.58
+
+VEGFR KI vs IC50: n = 24, pairs = 276
+  median ratio-of-ratios 1.64-fold [0.73, 4.18]; mean r 0.51 [-0.19, 1.24]
+  SD r 2.28 [1.67, 2.77] (sqrt2 x SD of D = 2.33); pairs >2-fold 0.78 [0.68, 0.86]; >10-fold 0.35 [0.20, 0.49]
+  null within-assay: SD r 0.65-1.18; >2-fold 0.29-0.59; >10-fold 0.00-0.05
+  null inter-lab: SD r 1.97-3.54; >2-fold 0.72-0.87; >10-fold 0.25-0.56
+
+CLK1 radiometric vs ADP-Glo: n = 27, pairs = 351
+  median ratio-of-ratios 2.12-fold [1.33, 3.99]; mean r 1.01 [0.26, 1.87]
+  SD r 1.79 [0.94, 2.44] (sqrt2 x SD of D = 2.05); pairs >2-fold 0.65 [0.49, 0.78]; >10-fold 0.19 [0.04, 0.36]
+  null within-assay: SD r 0.65-1.13; >2-fold 0.30-0.57; >10-fold 0.00-0.05
+  null inter-lab: SD r 2.12-3.50; >2-fold 0.75-0.88; >10-fold 0.31-0.58
+
+DYRK1A radiometric vs ADP-Glo: n = 30, pairs = 435
+  median ratio-of-ratios 0.90-fold [0.55, 1.66]; mean r 0.02 [-0.53, 0.59]
+  SD r 1.73 [1.19, 2.10] (sqrt2 x SD of D = 1.72); pairs >2-fold 0.67 [0.53, 0.77]; >10-fold 0.19 [0.06, 0.33]
+  null within-assay: SD r 0.67-1.14; >2-fold 0.31-0.57; >10-fold 0.00-0.05
+  null inter-lab: SD r 2.25-3.65; >2-fold 0.77-0.88; >10-fold 0.34-0.58

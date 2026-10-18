@@ -1,0 +1,48 @@
+
+######## VEGFR: ln KI (x) vs ln IC50 (y), all compounds  n = 24
+R2 0.68 (p = 7.3e-07); OLS 0.82 [0.64, 1.01], intercept 0.13; Deming 0.95 [0.74, 1.22] (lambda=1: 0.99, 2.5: 0.91); Passing-Bablok 1.02 [0.77, 1.37]
+CCC 0.81 [0.65, 0.89]; Spearman 0.83; Kendall 0.65; max Cook 0.164 (4/n = 0.167)
+bias ln(y/x) 0.59 [-0.02, 1.20] = 1.8-fold [1.0, 3.3]; SD 1.65; limits of agreement 0.072- to 45.6-fold; BA trend -0.01 (p = 0.96); n(y<x) 10
+variance 2.71; between-assay 2.29 [1.04, 3.50] (84%); between-assay SD per metric 1.07
+inversion thresholds: 10%: 3.4 ln = 29-fold [8, 146]; 5%: 4.5 ln = 90-fold [16, 793]; 1%: 7.0 ln = 1120-fold [72, 33496]
+window R2: 2: 0.25, 3: 0.20, 4: 0.26, 5: 0.29, 6: 0.32, 7: 0.34
+cluster upper: n = 14, R2 = 0.15 (p = 0.16)
+cluster lower: n = 9, R2 = 0.19 (p = 0.25)
+null within-assay: R2 [0.91, 0.97] Deming [0.90, 1.09] SD [0.46, 0.84] frac(y<x) [0.04, 0.33] CCC [0.92, 0.97] thr10 3-fold thr05 5-fold; windows 2: 0.42 [0.24, 0.64], 3: 0.57 [0.41, 0.76], 4: 0.66 [0.52, 0.85], 5: 0.72 [0.57, 0.87], 6: 0.74 [0.59, 0.89], 7: 0.75 [0.60, 0.90]; cluster upper 0.83 [0.66, 0.93]; cluster lower 0.78 [0.49, 0.94]
+null inter-lab: R2 [0.41, 0.79] Deming [0.71, 1.38] SD [1.44, 2.57] frac(y<x) [0.21, 0.58] CCC [0.61, 0.87] thr10 55-fold thr05 213-fold; windows 2: 0.23 [0.10, 0.46], 3: 0.23 [0.12, 0.40], 4: 0.25 [0.13, 0.43], 5: 0.28 [0.14, 0.49], 6: 0.31 [0.16, 0.54], 7: 0.33 [0.18, 0.58]; cluster upper 0.26 [0.01, 0.63]; cluster lower 0.19 [0.00, 0.69]
+scenario S1 exclude IC50<KI beyond 2 SD: n 20, R2 0.83, OLS 0.92, Dem 0.99, bias 1.11, sdD 1.23, CCC 0.84
+    null within-assay: R2 [0.91, 0.97], Dem [0.90, 1.10], bias [0.34, 0.86], sdD [0.46, 0.82], CCC [0.92, 0.97]
+    null inter-lab: R2 [0.56, 0.88], Dem [0.75, 1.31], bias [0.55, 1.92], sdD [1.07, 2.07], CCC [0.63, 0.90]
+scenario S2 exclude all IC50<KI: n 14, R2 0.93, OLS 0.97, Dem 1.00, bias 1.76, sdD 0.79, CCC 0.81
+    null within-assay: R2 [0.94, 0.99], Dem [0.91, 1.09], bias [0.59, 1.04], sdD [0.34, 0.67], CCC [0.90, 0.97]
+    null inter-lab: R2 [0.61, 0.94], Dem [0.75, 1.29], bias [1.17, 2.52], sdD [0.77, 1.89], CCC [0.53, 0.88]
+scenario S3 S1 + set compatible IC50=KI: n 20, R2 0.87, OLS 0.95, Dem 1.00, bias 1.23, sdD 1.06, CCC 0.85
+    null within-assay: R2 [0.93, 0.98], Dem [0.91, 1.08], bias [0.45, 0.90], sdD [0.40, 0.71], CCC [0.92, 0.97]
+    null inter-lab: R2 [0.61, 0.92], Dem [0.77, 1.26], bias [0.80, 2.01], sdD [0.89, 1.88], CCC [0.63, 0.91]
+scenario S4 keep all, set compatible IC50=KI: n 24, R2 0.70, OLS 0.84, Dem 0.96, bias 0.70, sdD 1.58, CCC 0.81
+    null within-assay: R2 [0.93, 0.98], Dem [0.91, 1.08], bias [0.44, 0.89], sdD [0.40, 0.73], CCC [0.92, 0.97]
+    null inter-lab: R2 [0.43, 0.83], Dem [0.71, 1.36], bias [-0.05, 1.49], sdD [1.30, 2.52], CCC [0.62, 0.88]
+
+######## VEGFR without digitonin and TCDD  n = 22
+R2 0.63 (p = 9.4e-06); OLS 0.80 [0.58, 1.02], intercept 0.02; Deming 0.94 [0.71, 1.30] (lambda=1: 1.00, 2.5: 0.90); Passing-Bablok 1.10 [0.75, 1.70]
+CCC 0.78 [0.60, 0.88]; Spearman 0.81; Kendall 0.62; max Cook 0.160 (4/n = 0.182)
+bias ln(y/x) 0.52 [-0.19, 1.21] = 1.7-fold [0.8, 3.4]; SD 1.71; limits of agreement 0.06- to 47.8-fold; BA trend -0.00 (p = 1); n(y<x) 10
+variance 2.91; between-assay 2.49 [1.12, 3.72] (85%); between-assay SD per metric 1.11
+inversion thresholds: 10%: 3.6 ln = 36-fold [8, 428]; 5%: 4.8 ln = 121-fold [17, 3355]; 1%: 7.5 ln = 1772-fold [85, 317893]
+window R2: 2: 0.29, 3: 0.23, 4: 0.25
+null within-assay: R2 [0.90, 0.97] Deming [0.89, 1.11] SD [0.46, 0.85] frac(y<x) [0.05, 0.41] CCC [0.92, 0.97] thr10 3-fold thr05 5-fold; windows 2: 0.44 [0.24, 0.66], 3: 0.57 [0.39, 0.75], 4: 0.67 [0.51, 0.83]
+null inter-lab: R2 [0.37, 0.79] Deming [0.69, 1.42] SD [1.43, 2.60] frac(y<x) [0.18, 0.59] CCC [0.58, 0.87] thr10 61-fold thr05 245-fold; windows 2: 0.24 [0.09, 0.44], 3: 0.24 [0.12, 0.44], 4: 0.25 [0.13, 0.45]
+
+subset IC50 reported once: n = 15, R2 = 0.86, OLS = 0.95, SD ln KI = 3.16
+    null within-assay: R2 0.93-0.98
+    null inter-lab: R2 0.49-0.88
+
+subset IC50 replicated: n = 9, R2 = 0.26, OLS = 0.34, SD ln KI = 2.20
+    null within-assay: R2 0.71-0.97
+    null inter-lab: R2 0.01-0.79
+
+ln-SD between IC50 reports (n = 9): median 0.93
+compounds with IC50 < KI: VATALANIB (-0.15, z = -0.2), DORAMAPIMOD (-1.39, z = -2.1), SORAFENIB (-1.66, z = -2.6), ILORASERTIB (-0.07, z = -0.1), CHEMBL2004290 (-0.38, z = -0.6), CHEMBL21156 (-0.96, z = -1.5), LINIFANIB (-3.10, z = -4.8), CEDIRANIB (-0.46, z = -0.7), DOVITINIB (-1.81, z = -2.8), ERLOTINIB (-0.46, z = -0.7)
+Gaussian mixture BIC (1 vs 2 components): 120.3, 119.9
+OLS intercept with affinities in uM: 0.13
+OLS intercept with affinities in nM: 1.38

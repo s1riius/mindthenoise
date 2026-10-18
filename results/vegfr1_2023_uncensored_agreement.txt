@@ -1,0 +1,24 @@
+
+######## VEGFR: ln KI (x) vs ln IC50 (y), all compounds  n = 20
+R2 0.62 (p = 3.4e-05); OLS 0.78 [0.54, 1.04], intercept -0.12; Deming 0.93 [0.65, 1.26] (lambda=1: 0.98, 2.5: 0.88); Passing-Bablok 1.07 [0.69, 1.70]
+CCC 0.77 [0.58, 0.87]; Spearman 0.81; Kendall 0.63; max Cook 0.239 (4/n = 0.200)
+bias ln(y/x) 0.59 [-0.15, 1.27] = 1.8-fold [0.9, 3.6]; SD 1.69; limits of agreement 0.065- to 49.7-fold; BA trend -0.02 (p = 0.93); n(y<x) 8
+variance 2.87; between-assay 2.44 [0.95, 3.83] (85%); between-assay SD per metric 1.10
+inversion thresholds: 10%: 3.6 ln = 35-fold [6, 513]; 5%: 4.8 ln = 119-fold [11, 4280]; 1%: 7.5 ln = 1743-fold [43, 464718]
+window R2: 2: 0.36, 3: 0.20, 4: 0.26, 5: 0.29, 6: 0.32, 7: 0.33
+cluster upper: n = 10, R2 = 0.09 (p = 0.41)
+cluster lower: n = 9, R2 = 0.19 (p = 0.25)
+null within-assay: R2 [0.89, 0.97] Deming [0.88, 1.12] SD [0.44, 0.85] frac(y<x) [0.05, 0.35] CCC [0.90, 0.97] thr10 3-fold thr05 5-fold; windows 2: 0.45 [0.22, 0.69], 3: 0.64 [0.45, 0.81], 4: 0.76 [0.60, 0.89], 5: 0.82 [0.68, 0.92], 6: 0.84 [0.70, 0.94], 7: 0.85 [0.72, 0.94]; cluster upper 0.83 [0.62, 0.95]; cluster lower 0.78 [0.49, 0.93]
+null inter-lab: R2 [0.33, 0.79] Deming [0.64, 1.48] SD [1.36, 2.65] frac(y<x) [0.20, 0.60] CCC [0.54, 0.87] thr10 51-fold thr05 194-fold; windows 2: 0.24 [0.09, 0.48], 3: 0.25 [0.11, 0.47], 4: 0.28 [0.13, 0.49], 5: 0.31 [0.15, 0.53], 6: 0.35 [0.15, 0.61], 7: 0.37 [0.16, 0.65]; cluster upper 0.25 [0.00, 0.73]; cluster lower 0.19 [0.00, 0.70]
+scenario S1 exclude IC50<KI beyond 2 SD: n 16, R2 0.83, OLS 0.99, Dem 1.07, bias 1.23, sdD 1.14, CCC 0.82
+    null within-assay: R2 [0.90, 0.97], Dem [0.88, 1.12], bias [0.31, 0.88], sdD [0.45, 0.84], CCC [0.90, 0.97]
+    null inter-lab: R2 [0.48, 0.88], Dem [0.71, 1.38], bias [0.51, 1.99], sdD [1.05, 2.15], CCC [0.56, 0.89]
+scenario S2 exclude all IC50<KI: n 12, R2 0.92, OLS 0.96, Dem 0.99, bias 1.73, sdD 0.82, CCC 0.80
+    null within-assay: R2 [0.93, 0.98], Dem [0.90, 1.10], bias [0.56, 1.06], sdD [0.33, 0.69], CCC [0.88, 0.96]
+    null inter-lab: R2 [0.52, 0.94], Dem [0.71, 1.37], bias [1.10, 2.56], sdD [0.73, 1.92], CCC [0.46, 0.88]
+scenario S3 S1 + set compatible IC50=KI: n 16, R2 0.85, OLS 0.99, Dem 1.05, bias 1.30, sdD 1.05, CCC 0.82
+    null within-assay: R2 [0.92, 0.98], Dem [0.90, 1.10], bias [0.43, 0.91], sdD [0.39, 0.72], CCC [0.90, 0.97]
+    null inter-lab: R2 [0.54, 0.92], Dem [0.73, 1.33], bias [0.71, 2.05], sdD [0.85, 1.94], CCC [0.56, 0.91]
+scenario S4 keep all, set compatible IC50=KI: n 20, R2 0.63, OLS 0.77, Dem 0.91, bias 0.64, sdD 1.67, CCC 0.77
+    null within-assay: R2 [0.92, 0.98], Dem [0.90, 1.10], bias [0.41, 0.90], sdD [0.38, 0.76], CCC [0.90, 0.97]
+    null inter-lab: R2 [0.35, 0.82], Dem [0.65, 1.45], bias [-0.16, 1.55], sdD [1.23, 2.59], CCC [0.55, 0.87]

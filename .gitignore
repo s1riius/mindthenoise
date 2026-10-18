@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.DS_Store
+~$*
+# working copies made by run_all.sh
+scripts/*.csv

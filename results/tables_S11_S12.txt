@@ -1,0 +1,164 @@
+
+==== Kd_CLK1 vs R_CLK1: 2 censored values excluded; 15 of 35 usable values outside the tested range
+
+######## Lindberg Kd_CLK1 vs R_CLK1 (all usable)  n = 35
+R2 0.55 (p = 3.8e-07); OLS 0.66 [0.48, 0.91], intercept 1.47; Deming 0.87 [0.63, 1.26] (lambda=1: 0.87, 2.5: 0.76); Passing-Bablok 0.99 [0.70, 1.33]
+CCC 0.29 [0.21, 0.36]; Spearman 0.77; Kendall 0.56; max Cook 0.501 (4/n = 0.114)
+bias ln(y/x) 3.42 [2.94, 3.88] = 30.7-fold [18.9, 48.6]; SD 1.44; limits of agreement 1.8- to 516-fold; BA trend -0.12 (p = 0.37); n(y<x) 1
+variance 2.07; between-assay 1.65 [0.62, 2.82] (80%); between-assay SD per metric 0.91
+inversion thresholds: 10%: 3.0 ln = 21-fold [7, 78]; 5%: 4.1 ln = 59-fold [13, 344]; 1%: 6.4 ln = 579-fold [54, 9081]
+window R2: 2: 0.27, 3: 0.19, 4: 0.22
+cluster lower: n = 18, R2 = 0.10 (p = 0.20)
+cluster upper: n = 17, R2 = 0.00 (p = 0.87)
+null within-assay: R2 [0.83, 0.94] Deming [0.89, 1.13] SD [0.50, 0.81] frac(y<x) [0.00, 0.00] CCC [0.31, 0.39] thr10 3-fold thr05 5-fold; windows 2: 0.40 [0.29, 0.54], 3: 0.55 [0.41, 0.70], 4: 0.65 [0.52, 0.81]; cluster lower 0.64 [0.39, 0.82]; cluster upper 0.61 [0.35, 0.82]
+null inter-lab: R2 [0.20, 0.62] Deming [0.73, 1.73] SD [1.52, 2.47] frac(y<x) [0.00, 0.11] CCC [0.18, 0.42] thr10 124-fold thr05 639-fold; windows 2: 0.16 [0.08, 0.28], 3: 0.16 [0.07, 0.27], 4: 0.18 [0.09, 0.32]; cluster lower 0.08 [0.00, 0.43]; cluster upper 0.08 [0.00, 0.44]
+/usr/local/lib/python3.11/dist-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+
+######## Lindberg Kd_CLK1 vs R_CLK1 (within tested range)  n = 20
+R2 0.17 (p = 0.071); OLS 0.41 [-0.11, 0.86], intercept 0.69; Deming 0.96 [-0.70, 2.80] (lambda=1: 0.96, 2.5: 0.57); Passing-Bablok 1.24 [0.71, 2.94]
+CCC 0.10 [-0.02, 0.21]; Spearman 0.40; Kendall 0.28; max Cook 0.993 (4/n = 0.200)
+bias ln(y/x) 3.35 [2.71, 3.97] = 28.6-fold [15.0, 53.1]; SD 1.48; limits of agreement 1.6- to 523-fold; BA trend -0.02 (p = 0.94); n(y<x) 1
+variance 2.20; between-assay 1.78 [0.30, 3.82] (81%); between-assay SD per metric 0.94
+/tmp/claude-0/-home-claude/d3e26577-686e-5bc8-ae10-9afe7a7e2029/scratchpad/repo/scripts/affinity_agreement.py:123: RuntimeWarning: overflow encountered in exp
+  print('inversion thresholds: ' + '; '.join(f"{p:.0%}: {t:.1f} ln = {np.exp(t):.0f}-fold [{np.exp(c[0]):.0f}, {np.exp(c[1]):.0f}]" for p, (t, c) in o['thr'].items()))
+inversion thresholds: 10%: 5.0 ln = 148-fold [5, inf]; 5%: 6.7 ln = 808-fold [10, inf]; 1%: 10.4 ln = 34461-fold [35, inf]
+window R2: 2: 0.29, 3: 0.12, 4: 0.07
+null within-assay: R2 [0.59, 0.88] Deming [0.76, 1.31] SD [0.45, 0.83] frac(y<x) [0.00, 0.00] CCC [0.13, 0.22] thr10 4-fold thr05 5-fold; windows 2: 0.40 [0.22, 0.62], 3: 0.51 [0.31, 0.74], 4: 0.57 [0.33, 0.79]
+null inter-lab: R2 [0.00, 0.51] Deming [0.33, 6.12] SD [1.35, 2.61] frac(y<x) [0.00, 0.15] CCC [0.01, 0.30] thr10 750-fold thr05 7131-fold; windows 2: 0.17 [0.05, 0.35], 3: 0.14 [0.04, 0.33], 4: 0.14 [0.03, 0.34]
+
+==== Kd_CLK1 vs P_CLK1: 2 censored values excluded; 11 of 27 usable values outside the tested range
+
+######## Lindberg Kd_CLK1 vs P_CLK1 (all usable)  n = 27
+R2 0.38 (p = 0.00059); OLS 0.47 [0.30, 0.75], intercept -0.09; Deming 0.65 [0.36, 1.39] (lambda=1: 0.65, 2.5: 0.54); Passing-Bablok 0.70 [0.45, 1.18]
+CCC 0.19 [0.10, 0.26]; Spearman 0.68; Kendall 0.48; max Cook 0.332 (4/n = 0.148)
+bias ln(y/x) 3.30 [2.76, 3.84] = 27.1-fold [15.8, 46.5]; SD 1.45; limits of agreement 1.6- to 462-fold; BA trend -0.33 (p = 0.098); n(y<x) 0
+variance 2.09; between-assay 1.67 [0.59, 2.68] (80%); between-assay SD per metric 0.91
+inversion thresholds: 10%: 3.5 ln = 33-fold [8, 676]; 5%: 4.7 ln = 108-fold [16, 6197]; 1%: 7.3 ln = 1489-fold [73, 828113]
+window R2: 2: 0.13, 3: 0.17, 4: 0.17
+cluster lower: n = 17, R2 = 0.15 (p = 0.13)
+cluster upper: n = 10, R2 = 0.00 (p = 0.99)
+null within-assay: R2 [0.73, 0.91] Deming [0.84, 1.19] SD [0.47, 0.82] frac(y<x) [0.00, 0.00] CCC [0.22, 0.31] thr10 3-fold thr05 5-fold; windows 2: 0.42 [0.29, 0.61], 3: 0.57 [0.39, 0.75], 4: 0.66 [0.46, 0.81]; cluster lower 0.66 [0.41, 0.84]; cluster upper 0.60 [0.24, 0.88]
+null inter-lab: R2 [0.05, 0.54] Deming [0.61, 2.61] SD [1.45, 2.54] frac(y<x) [0.00, 0.15] CCC [0.09, 0.35] thr10 317-fold thr05 2244-fold; windows 2: 0.16 [0.07, 0.33], 3: 0.15 [0.05, 0.29], 4: 0.16 [0.05, 0.33]; cluster lower 0.10 [0.00, 0.46]; cluster upper 0.10 [0.00, 0.58]
+
+######## Lindberg Kd_CLK1 vs P_CLK1 (within tested range)  n = 16
+R2 0.16 (p = 0.12); OLS 0.55 [0.20, 1.22], intercept 0.36; Deming 1.98 [0.52, 8.26] (lambda=1: 1.98, 2.5: 1.07); Passing-Bablok 1.77 [0.67, 7.13]
+CCC 0.10 [0.03, 0.21]; Spearman 0.40; Kendall 0.23; max Cook 0.257 (4/n = 0.250)
+bias ln(y/x) 2.75 [2.12, 3.38] = 15.7-fold [8.3, 29.4]; SD 1.35; limits of agreement 1.1- to 220-fold; BA trend 0.41 (p = 0.24); n(y<x) 0
+variance 1.82; between-assay 1.39 [0.19, 2.76] (77%); between-assay SD per metric 0.83
+inversion thresholds: 10%: 3.2 ln = 25-fold [4, 5791]; 5%: 4.3 ln = 73-fold [7, 110250]; 1%: 6.7 ln = 806-fold [22, 73992418]
+window R2: 2: 0.07, 3: 0.09, 4: 0.08
+null within-assay: R2 [0.49, 0.88] Deming [0.70, 1.42] SD [0.42, 0.89] frac(y<x) [0.00, 0.00] CCC [0.13, 0.27] thr10 3-fold thr05 5-fold; windows 2: 0.43 [0.22, 0.70], 3: 0.57 [0.24, 0.81], 4: 0.60 [0.27, 0.84]
+null inter-lab: R2 [0.00, 0.50] Deming [-5.43, 9.48] SD [1.31, 2.71] frac(y<x) [0.00, 0.25] CCC [-0.05, 0.36] thr10 3459-fold thr05 55266-fold; windows 2: 0.16 [0.04, 0.41], 3: 0.14 [0.03, 0.39], 4: 0.14 [0.02, 0.44]
+
+==== R_CLK1 vs P_CLK1: 2 censored values excluded; 12 of 27 usable values outside the tested range
+
+######## Lindberg R_CLK1 vs P_CLK1 (all usable)  n = 27
+R2 0.36 (p = 0.00099); OLS 0.47 [0.15, 0.88], intercept -1.80; Deming 0.67 [0.23, 1.17] (lambda=1: 0.67, 2.5: 0.55); Passing-Bablok 0.78 [0.55, 1.11]
+CCC 0.57 [0.21, 0.84]; Spearman 0.64; Kendall 0.46; max Cook 1.570 (4/n = 0.148)
+bias ln(y/x) -0.28 [-0.85, 0.22] = 0.8-fold [0.4, 1.2]; SD 1.45; limits of agreement 0.044- to 13-fold; BA trend -0.30 (p = 0.14); n(y<x) 15
+variance 2.11; between-assay 1.69 [0.19, 3.90] (80%); between-assay SD per metric 0.92
+inversion thresholds: 10%: 4.2 ln = 64-fold [4, 4603284]; 5%: 5.6 ln = 263-fold [6, 849160998]; 1%: 8.7 ln = 5989-fold [17, 86033563958175]
+window R2: 2: 0.33, 3: 0.46, 4: 0.51
+null within-assay: R2 [0.72, 0.90] Deming [0.83, 1.19] SD [0.47, 0.82] frac(y<x) [0.48, 0.85] CCC [0.82, 0.93] thr10 3-fold thr05 5-fold; windows 2: 0.42 [0.28, 0.63], 3: 0.57 [0.40, 0.78], 4: 0.65 [0.43, 0.83]
+null inter-lab: R2 [0.02, 0.48] Deming [0.40, 2.59] SD [1.60, 2.83] frac(y<x) [0.37, 0.74] CCC [0.13, 0.68] thr10 1878-fold thr05 24370-fold; windows 2: 0.16 [0.07, 0.32], 3: 0.14 [0.05, 0.29], 4: 0.14 [0.05, 0.30]
+
+######## Lindberg R_CLK1 vs P_CLK1 (within tested range)  n = 15
+R2 0.09 (p = 0.28); OLS 0.30 [-0.21, 1.23], intercept -1.95; Deming 1.02 [-1.48, 3.83] (lambda=1: 1.02, 2.5: 0.46); Passing-Bablok 1.02 [0.53, 2.24]
+CCC 0.25 [-0.14, 0.74]; Spearman 0.40; Kendall 0.30; max Cook 1.934 (4/n = 0.267)
+bias ln(y/x) -0.84 [-1.69, -0.13] = 0.4-fold [0.2, 0.9]; SD 1.62; limits of agreement 0.018- to 10.3-fold; BA trend 0.01 (p = 0.98); n(y<x) 11
+variance 2.62; between-assay 2.20 [-0.04, 5.07] (84%); between-assay SD per metric 1.05
+inversion thresholds: 10%: 7.3 ln = 1437-fold [3, inf]; 5%: 9.7 ln = 17033-fold [4, inf]; 1%: 15.2 ln = 4012437-fold [8, inf]
+window R2: 2: 0.39, 3: 0.46, 4: 0.45
+null within-assay: R2 [0.52, 0.89] Deming [0.72, 1.41] SD [0.42, 0.89] frac(y<x) [0.73, 1.00] CCC [0.51, 0.80] thr10 3-fold thr05 5-fold; windows 2: 0.41 [0.22, 0.69], 3: 0.51 [0.26, 0.80], 4: 0.56 [0.27, 0.82]
+null inter-lab: R2 [0.00, 0.53] Deming [-2.42, 6.33] SD [1.41, 3.03] frac(y<x) [0.40, 0.87] CCC [-0.12, 0.64] thr10 21237-fold thr05 628949-fold; windows 2: 0.18 [0.04, 0.48], 3: 0.17 [0.05, 0.42], 4: 0.15 [0.04, 0.40]
+
+==== Kd_D1A vs R_D1A: 4 censored values excluded; 22 of 33 usable values outside the tested range
+
+######## Lindberg Kd_D1A vs R_D1A (all usable)  n = 33
+R2 0.49 (p = 5.1e-06); OLS 0.54 [0.31, 0.74], intercept -0.24; Deming 0.68 [0.42, 0.92] (lambda=1: 0.68, 2.5: 0.60); Passing-Bablok 0.71 [0.45, 0.93]
+CCC 0.37 [0.22, 0.49]; Spearman 0.74; Kendall 0.59; max Cook 0.473 (4/n = 0.121)
+bias ln(y/x) 2.52 [1.95, 3.04] = 12.5-fold [7.0, 20.9]; SD 1.61; limits of agreement 0.53- to 292-fold; BA trend -0.32 (p = 0.039); n(y<x) 2
+variance 2.59; between-assay 2.16 [0.71, 3.85] (84%); between-assay SD per metric 1.04
+inversion thresholds: 10%: 3.7 ln = 42-fold [6, 921]; 5%: 5.0 ln = 151-fold [11, 9379]; 1%: 7.8 ln = 2518-fold [45, 1581279]
+window R2: 2: 0.14, 3: 0.22, 4: 0.20
+null within-assay: R2 [0.83, 0.93] Deming [0.88, 1.13] SD [0.50, 0.81] frac(y<x) [0.00, 0.00] CCC [0.44, 0.54] thr10 3-fold thr05 5-fold; windows 2: 0.44 [0.32, 0.58], 3: 0.61 [0.46, 0.75], 4: 0.71 [0.54, 0.82]
+null inter-lab: R2 [0.19, 0.62] Deming [0.74, 1.74] SD [1.52, 2.48] frac(y<x) [0.03, 0.21] CCC [0.24, 0.53] thr10 124-fold thr05 638-fold; windows 2: 0.17 [0.08, 0.30], 3: 0.17 [0.08, 0.29], 4: 0.19 [0.09, 0.34]
+
+######## Lindberg Kd_D1A vs R_D1A (within tested range)  n = 11
+R2 0.36 (p = 0.05); OLS 0.38 [-0.09, 0.57], intercept 0.21; Deming 0.48 [-0.41, 0.99] (lambda=1: 0.48, 2.5: 0.42); Passing-Bablok 0.45 [0.09, 1.33]
+CCC 0.13 [-0.02, 0.27]; Spearman 0.53; Kendall 0.35; max Cook 1.272 (4/n = 0.364)
+bias ln(y/x) 2.81 [2.16, 3.39] = 16.6-fold [8.7, 29.5]; SD 1.09; limits of agreement 2- to 141-fold; BA trend -0.56 (p = 0.1); n(y<x) 0
+variance 1.19; between-assay 0.77 [-0.02, 1.41] (64%); between-assay SD per metric 0.62
+inversion thresholds: 10%: 3.1 ln = 23-fold [3, 6443252523938320]; 5%: 4.2 ln = 67-fold [5, 1532279697903608922112]; 1%: 6.6 ln = 714-fold [12, 1153566794620599269365727117705216]
+window R2: 2: 0.06, 3: 0.08, 4: 0.26
+null within-assay: R2 [0.43, 0.90] Deming [0.65, 1.57] SD [0.37, 0.94] frac(y<x) [0.00, 0.00] CCC [0.11, 0.26] thr10 3-fold thr05 5-fold; windows 2: 0.42 [0.09, 0.81], 3: 0.58 [0.23, 0.88], 4: 0.71 [0.35, 0.92]
+null inter-lab: R2 [0.00, 0.59] Deming [-7.31, 12.84] SD [1.19, 2.87] frac(y<x) [0.00, 0.27] CCC [-0.09, 0.39] thr10 5817-fold thr05 110921-fold; windows 2: 0.19 [0.02, 0.60], 3: 0.16 [0.02, 0.54], 4: 0.15 [0.01, 0.57]
+
+==== Kd_D1A vs P_D1A: 3 censored values excluded; 11 of 28 usable values outside the tested range
+
+######## Lindberg Kd_D1A vs P_D1A (all usable)  n = 28
+R2 0.51 (p = 2.1e-05); OLS 0.60 [0.42, 0.83], intercept -0.77; Deming 0.79 [0.58, 1.21] (lambda=1: 0.79, 2.5: 0.69); Passing-Bablok 0.83 [0.60, 1.16]
+CCC 0.48 [0.29, 0.64]; Spearman 0.73; Kendall 0.55; max Cook 0.305 (4/n = 0.143)
+bias ln(y/x) 1.79 [1.28, 2.32] = 6.0-fold [3.6, 10.2]; SD 1.45; limits of agreement 0.35- to 102-fold; BA trend -0.19 (p = 0.24); n(y<x) 3
+variance 2.09; between-assay 1.67 [0.42, 3.05] (80%); between-assay SD per metric 0.91
+inversion thresholds: 10%: 3.5 ln = 32-fold [6, 564]; 5%: 4.6 ln = 102-fold [10, 4861]; 1%: 7.2 ln = 1363-fold [39, 566918]
+window R2: 2: 0.19, 3: 0.19, 4: 0.17
+null within-assay: R2 [0.80, 0.93] Deming [0.86, 1.15] SD [0.48, 0.82] frac(y<x) [0.00, 0.04] CCC [0.54, 0.68] thr10 3-fold thr05 5-fold; windows 2: 0.45 [0.29, 0.60], 3: 0.58 [0.42, 0.74], 4: 0.64 [0.47, 0.80]
+null inter-lab: R2 [0.15, 0.61] Deming [0.67, 1.96] SD [1.49, 2.53] frac(y<x) [0.07, 0.32] CCC [0.25, 0.62] thr10 131-fold thr05 686-fold; windows 2: 0.18 [0.08, 0.31], 3: 0.17 [0.09, 0.31], 4: 0.19 [0.08, 0.32]
+
+######## Lindberg Kd_D1A vs P_D1A (within tested range)  n = 17
+R2 0.06 (p = 0.33); OLS 0.21 [-0.16, 0.88], intercept -2.70; Deming 0.49 [-1.89, 6.18] (lambda=1: 0.49, 2.5: 0.28); Passing-Bablok 1.08 [0.37, 3.84]
+CCC 0.15 [-0.08, 0.44]; Spearman 0.33; Kendall 0.26; max Cook 0.485 (4/n = 0.235)
+bias ln(y/x) 1.36 [0.73, 2.03] = 3.9-fold [2.1, 7.6]; SD 1.46; limits of agreement 0.22- to 67.9-fold; BA trend -0.31 (p = 0.45); n(y<x) 3
+variance 2.12; between-assay 1.70 [0.17, 3.35] (80%); between-assay SD per metric 0.92
+inversion thresholds: 10%: 8.2 ln = 3782-fold [4, inf]; 5%: 11.0 ln = 62292-fold [7, inf]; 1%: 17.2 ln = 30355196-fold [22, inf]
+window R2: 2: 0.22, 3: 0.17, 4: 0.11
+null within-assay: R2 [0.44, 0.85] Deming [0.70, 1.45] SD [0.43, 0.87] frac(y<x) [0.00, 0.12] CCC [0.29, 0.56] thr10 4-fold thr05 6-fold; windows 2: 0.38 [0.20, 0.63], 3: 0.49 [0.23, 0.76], 4: 0.52 [0.24, 0.79]
+null inter-lab: R2 [0.00, 0.47] Deming [-7.29, 11.03] SD [1.30, 2.69] frac(y<x) [0.06, 0.47] CCC [-0.10, 0.54] thr10 8759-fold thr05 191939-fold; windows 2: 0.16 [0.05, 0.38], 3: 0.14 [0.03, 0.36], 4: 0.13 [0.02, 0.38]
+
+==== R_D1A vs P_D1A: 1 censored values excluded; 20 of 30 usable values outside the tested range
+
+######## Lindberg R_D1A vs P_D1A (all usable)  n = 30
+R2 0.71 (p = 6.1e-09); OLS 0.93 [0.70, 1.14], intercept -1.00; Deming 1.13 [0.94, 1.67] (lambda=1: 1.13, 2.5: 1.04); Passing-Bablok 1.28 [1.07, 1.99]
+CCC 0.78 [0.54, 0.88]; Spearman 0.82; Kendall 0.64; max Cook 0.313 (4/n = 0.133)
+bias ln(y/x) -0.76 [-1.16, -0.31] = 0.5-fold [0.3, 0.7]; SD 1.22; limits of agreement 0.043- to 5.09-fold; BA trend 0.11 (p = 0.32); n(y<x) 25
+variance 1.49; between-assay 1.06 [0.33, 1.74] (71%); between-assay SD per metric 0.73
+inversion thresholds: 10%: 2.2 ln = 9-fold [3, 43]; 5%: 3.0 ln = 20-fold [4, 157]; 1%: 4.7 ln = 109-fold [8, 2668]
+window R2: 2: 0.34, 3: 0.35, 4: 0.37
+null within-assay: R2 [0.85, 0.95] Deming [0.89, 1.13] SD [0.49, 0.82] frac(y<x) [0.77, 0.97] CCC [0.84, 0.93] thr10 3-fold thr05 5-fold; windows 2: 0.41 [0.26, 0.59], 3: 0.52 [0.35, 0.71], 4: 0.59 [0.42, 0.80]
+null inter-lab: R2 [0.19, 0.63] Deming [0.63, 1.56] SD [1.65, 2.79] frac(y<x) [0.47, 0.80] CCC [0.40, 0.76] thr10 532-fold thr05 4496-fold; windows 2: 0.16 [0.07, 0.30], 3: 0.14 [0.06, 0.29], 4: 0.17 [0.06, 0.33]
+
+######## Lindberg R_D1A vs P_D1A (within tested range)  n = 10
+R2 0.74 (p = 0.0014); OLS 0.99 [-0.10, 1.36], intercept -1.06; Deming 1.18 [0.39, 4.74] (lambda=1: 1.18, 2.5: 1.09); Passing-Bablok 1.41 [0.84, 17.94]
+CCC 0.75 [-0.03, 0.89]; Spearman 0.55; Kendall 0.38; max Cook 0.408 (4/n = 0.400)
+bias ln(y/x) -1.05 [-1.69, -0.39] = 0.4-fold [0.2, 0.7]; SD 1.13; limits of agreement 0.038- to 3.24-fold; BA trend 0.15 (p = 0.46); n(y<x) 9
+variance 1.28; between-assay 0.86 [-0.15, 1.80] (67%); between-assay SD per metric 0.66
+inversion thresholds: 10%: 2.7 ln = 16-fold [1, inf]; 5%: 3.7 ln = 40-fold [2, inf]; 1%: 5.7 ln = 314-fold [2, inf]
+window R2: 2: 0.39, 3: 0.39, 4: 0.47
+null within-assay: R2 [0.81, 0.97] Deming [0.81, 1.24] SD [0.37, 0.93] frac(y<x) [0.80, 1.00] CCC [0.72, 0.91] thr10 5-fold thr05 9-fold; windows 2: 0.24 [0.03, 0.70], 3: 0.23 [0.05, 0.70], 4: 0.34 [0.06, 0.81]
+null inter-lab: R2 [0.05, 0.79] Deming [0.35, 2.79] SD [1.24, 3.22] frac(y<x) [0.40, 0.90] CCC [0.17, 0.82] thr10 270-fold thr05 1816-fold; windows 2: 0.21 [0.00, 0.69], 3: 0.21 [0.02, 0.64], 4: 0.24 [0.03, 0.60]
+
+==== Kd_GSK3B vs R_GSK3B: 19 censored values excluded; 7 of 18 usable values outside the tested range
+
+######## Lindberg Kd_GSK3B vs R_GSK3B (all usable)  n = 18
+R2 0.86 (p = 3.3e-08); OLS 0.71 [0.62, 0.84], intercept 1.18; Deming 0.75 [0.67, 0.93] (lambda=1: 0.75, 2.5: 0.73); Passing-Bablok 0.76 [0.52, 0.89]
+CCC 0.73 [0.53, 0.81]; Spearman 0.80; Kendall 0.65; max Cook 0.170 (4/n = 0.222)
+bias ln(y/x) 1.85 [1.29, 2.42] = 6.3-fold [3.6, 11.2]; SD 1.27; limits of agreement 0.52- to 76.5-fold; BA trend -0.27 (p = 0.012); n(y<x) 1
+variance 1.62; between-assay 1.19 [0.23, 2.07] (74%); between-assay SD per metric 0.77
+inversion thresholds: 10%: 3.2 ln = 24-fold [2, 248]; 5%: 4.2 ln = 70-fold [3, 1613]; 1%: 6.6 ln = 758-fold [4, 101350]
+window R2: 2: 0.31, 3: 0.25, 4: 0.27
+null within-assay: R2 [0.91, 0.98] Deming [0.89, 1.13] SD [0.43, 0.87] frac(y<x) [0.00, 0.06] CCC [0.73, 0.84] thr10 3-fold thr05 5-fold; windows 2: 0.38 [0.16, 0.64], 3: 0.50 [0.30, 0.71], 4: 0.60 [0.42, 0.76]
+null inter-lab: R2 [0.41, 0.83] Deming [0.72, 1.56] SD [1.31, 2.65] frac(y<x) [0.00, 0.39] CCC [0.48, 0.81] thr10 64-fold thr05 263-fold; windows 2: 0.21 [0.04, 0.50], 3: 0.24 [0.08, 0.44], 4: 0.26 [0.12, 0.46]
+
+######## Lindberg Kd_GSK3B vs R_GSK3B (within tested range)  n = 11
+R2 0.70 (p = 0.0013); OLS 0.72 [0.47, 0.93], intercept 1.31; Deming 0.83 [0.60, 1.23] (lambda=1: 0.83, 2.5: 0.77); Passing-Bablok 0.84 [0.52, 1.32]
+CCC 0.55 [0.32, 0.68]; Spearman 0.65; Kendall 0.49; max Cook 0.297 (4/n = 0.364)
+bias ln(y/x) 2.06 [1.34, 2.74] = 7.9-fold [3.8, 15.5]; SD 1.26; limits of agreement 0.67- to 92.2-fold; BA trend -0.17 (p = 0.42); n(y<x) 1
+variance 1.58; between-assay 1.16 [0.08, 2.34] (73%); between-assay SD per metric 0.76
+inversion thresholds: 10%: 3.5 ln = 32-fold [3, 3388]; 5%: 4.7 ln = 105-fold [4, 53751]; 1%: 7.3 ln = 1425-fold [7, 24114634]
+window R2: 2: 0.04, 3: 0.05, 4: 0.16
+null within-assay: R2 [0.83, 0.97] Deming [0.82, 1.23] SD [0.36, 0.93] frac(y<x) [0.00, 0.00] CCC [0.53, 0.72] thr10 3-fold thr05 5-fold; windows 2: 0.43 [0.04, 0.90], 3: 0.54 [0.27, 0.89], 4: 0.64 [0.40, 0.90]
+null inter-lab: R2 [0.12, 0.82] Deming [0.51, 2.25] SD [1.13, 2.86] frac(y<x) [0.00, 0.36] CCC [0.21, 0.74] thr10 64-fold thr05 266-fold; windows 2: 0.21 [0.00, 0.76], 3: 0.26 [0.03, 0.67], 4: 0.28 [0.08, 0.59]
+
+Figure 3 as originally plotted (all 37 compounds, censored values included): R2 = 0.61
