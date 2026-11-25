@@ -3,6 +3,7 @@ affinity_agreement.py - statistical analysis of agreement between affinity metri
 Reproduces all numbers of Tables S3, S5, and S6-S10 from two input files (Figures S15, S18 and S19: figures.py):
   vegfr.csv     columns: compound, Ki (nM), IC50 (nM, mean of reports), stdev (nM; 0 = single report)      [Table S11]
   lindberg.csv  columns: compound, Kd_D1A, Kd_CLK1, Kd_GSK3B (nM), R_D1A, R_CLK1, R_GSK3B (radiometric IC50, uM),
+                column prefixes map to S7 as Kd -> K_D, R -> R (radiometric IC50), P -> A (ADP-Glo IC50); D1A = DYRK1A,
                 P_D1A, P_CLK1 (ADP-Glo IC50, uM); empty = not available                                      [Table S12]
 Usage:  python affinity_agreement.py vegfr  |  lindberg  |  ratios  |  extras
 Conventions: natural logarithms; affinities in uM. Literature uncertainties in pK (log10) units are multiplied by ln 10.
@@ -53,16 +54,35 @@ def boot(f, x, y, rng, nb=NB):
         except Exception: pass
     return np.nanpercentile(v, [2.5, 97.5])
 # ---------------------------------------------------------------- null model (position-preserving)
-def null_sets(x, y, sx, sy, rng, n=NNULL):
+def null_sets(x, y, sx, sy, rng, n=NNULL, cap=None):
     """Datasets in which both metrics measure the same quantity (up to the observed mean offset) and differ only by
-    Gaussian measurement error of SD sx and sy; compound positions T are taken from the observed data."""
+    Gaussian measurement error of SD sx and sy; compound positions T are taken from the observed data.
+    If cap = (ln cx, ln cy) is given, the assay limits are re-applied to every simulated dataset, so that a simulated
+    value at or above the limit of its assay is censored exactly as the corresponding observed value was (S7.2)."""
     b = (y-x).mean(); T = (x+y-b)/2
-    for _ in range(n):
-        yield T + rng.normal(0, sx, len(x)), T + b + rng.normal(0, sy, len(x))
+    i = 0
+    while i < n:
+        xs, ys = T + rng.normal(0, sx, len(x)), T + b + rng.normal(0, sy, len(x))
+        if cap is not None:
+            k = (xs < cap[0]) & (ys < cap[1])
+            if k.sum() < 6: continue
+            xs, ys = xs[k], ys[k]
+        i += 1
+        yield xs, ys
+def km_split(order):
+    """The partition rule of S7.4: k-means (k = 2) on (lnx, lny). 'order' maps a cluster to a scalar; the cluster
+    with the smaller value is labelled 'lower'. Used only to test the sensitivity of the conditional cluster
+    analysis to re-deriving the partition from each simulated dataset."""
+    from sklearn.cluster import KMeans
+    def f(x, y):
+        c = KMeans(2, n_init=5, random_state=0).fit_predict(np.c_[x, y]); g0, g1 = c == 0, c == 1
+        lo, hi = (g0, g1) if order(x[g0], y[g0]) < order(x[g1], y[g1]) else (g1, g0)
+        return {'lower': lo, 'upper': hi}
+    return f
 def q95(v):
     v = np.asarray(v, float); v = v[~np.isnan(v)]; return np.percentile(v, [2.5, 50, 97.5])
 # ---------------------------------------------------------------- full analysis of one pair
-def analyse(x, y, label, lam, noise, rng, split=None, windows=(2, 3, 4), scenarios=None):
+def analyse(x, y, label, lam, noise, rng, split=None, windows=(2, 3, 4), scenarios=None, cap=None, split_rule=None):
     n = len(x); D = y-x; out = dict(label=label, n=n)
     s, i, r = stats.linregress(x, y)[:3]
     out.update(R2=r*r, p=stats.pearsonr(x, y)[1], OLS=s, OLS_ci=boot(lambda a, b: stats.linregress(a, b)[0], x, y, rng),
@@ -83,16 +103,23 @@ def analyse(x, y, label, lam, noise, rng, split=None, windows=(2, 3, 4), scenari
         out['clusters'] = {lab: (int(k.sum()), r2(x[k], y[k]), stats.pearsonr(x[k], y[k])[1]) for lab, k in split.items()}
     out['null'] = {}
     for name, (sx, sy) in noise.items():
-        acc = {k: [] for k in ['R2', 'Dem', 'sdD', 'neg', 'CCC', 'thr05', 'thr10', 'inv'] + [f'w{w}' for w in windows] + (list(split) if split else [])}
-        for it, (xs, ys) in enumerate(null_sets(x, y, sx, sy, rng)):
+        keys = ['R2', 'Dem', 'sdD', 'neg', 'CCC', 'thr05', 'thr10', 'inv'] + [f'w{w}' for w in windows]
+        keys += (list(split) if split else []) + ([f're_{l}' for l in ('lower', 'upper')] if split_rule else [])
+        acc = {k: [] for k in keys}
+        for it, (xs, ys) in enumerate(null_sets(x, y, sx, sy, rng, cap=cap)):
             acc['R2'].append(r2(xs, ys)); acc['Dem'].append(deming(xs, ys, lam)); acc['sdD'].append((ys-xs).std(ddof=1))
             acc['neg'].append(((ys-xs) < 0).mean()); acc['CCC'].append(ccc(xs, ys))
-            if split:
-                for lab, k in split.items(): acc[lab].append(r2(xs[k], ys[k]))
             if it < 300:
                 bt = inversion_beta(xs, ys); acc['thr05'].append(threshold(bt, 0.05)); acc['thr10'].append(threshold(bt, 0.10))
                 acc['inv'].append(inversion_bins(xs, ys))
                 for w in windows: acc[f'w{w}'].append(window_r2(xs, ys, w))
+        if split:            # conditional on the observed partition (S7.4): membership held fixed, no re-censoring
+            for xs, ys in null_sets(x, y, sx, sy, rng, n=1000):
+                for lab, k in split.items(): acc[lab].append(r2(xs[k], ys[k]))
+        if split_rule:       # sensitivity (S7.4): the partition rule re-derived for every simulated dataset
+            for xs, ys in null_sets(x, y, sx, sy, rng, n=1000, cap=cap):
+                for lab, k in split_rule(xs, ys).items():
+                    if k.sum() > 2: acc[f're_{lab}'].append(r2(xs[k], ys[k]))
         out['null'][name] = {k: (np.nanpercentile(np.array(v), [2.5, 50, 97.5], axis=0) if k == 'inv' else q95(v)) for k, v in acc.items() if len(v)}
     if scenarios:
         out['scen'] = {}
@@ -127,7 +154,9 @@ def report(o):
         g = lambda k: f"[{d[k][0]:.2f}, {d[k][2]:.2f}]"
         line = f"null {name}: R2 {g('R2')} Deming {g('Dem')} SD {g('sdD')} frac(y<x) {g('neg')} CCC {g('CCC')} "
         line += f"thr10 {np.exp(d['thr10'][1]):.0f}-fold thr05 {np.exp(d['thr05'][1]):.0f}-fold; windows " + ', '.join(f"{w[1:]}: {d[w][1]:.2f} {g(w)}" for w in d if w.startswith('w'))
-        for lab in o.get('clusters', {}): line += f"; cluster {lab} {d[lab][1]:.2f} {g(lab)}"
+        for lab in o.get('clusters', {}):
+            line += f"; cluster {lab} {d[lab][1]:.2f} {g(lab)}"
+            if f're_{lab}' in d: line += f" (rule re-applied: {d[f're_{lab}'][1]:.2f} {g(f're_{lab}')})"
         print(line)
     for sname, (ob, nul) in o.get('scen', {}).items():
         print(f"scenario {sname}: " + ', '.join(f'{k} {v:.2f}' if isinstance(v, float) else f'{k} {v}' for k, v in ob.items()))
@@ -151,10 +180,13 @@ def vegfr(path='vegfr.csv'):
         return f
     scen = {'S1 exclude IC50<KI beyond 2 SD': sc(1), 'S2 exclude all IC50<KI': sc(2),
             'S3 S1 + set compatible IC50=KI': sc(3), 'S4 keep all, set compatible IC50=KI': sc(4)}
-    report(analyse(x, y, 'VEGFR: ln KI (x) vs ln IC50 (y), all compounds', lam, noise, rng, split, windows=(2, 3, 4, 5, 6, 7), scenarios=scen))
+    report(analyse(x, y, 'VEGFR: ln KI (x) vs ln IC50 (y), all compounds', lam, noise, rng, split,
+                   windows=(2, 3, 4, 5, 6, 7), scenarios=scen, split_rule=km_split(lambda a, b: (b-a).mean())))
     k = ~d.compound.isin(['DIGITONIN', '2378-TCDD']).values
     report(analyse(x[k], y[k], 'VEGFR without digitonin and TCDD', lam, noise, rng))
     rep = (d.stdev > 0).values
+    # these masks are external provenance labels (how often an IC50 was reported), not selections on the
+    # measured values, so the observed mask is applied to each simulated dataset by construction
     for lab, m in [('IC50 reported once', ~rep), ('IC50 replicated', rep)]:
         print(f"\nsubset {lab}: n = {m.sum()}, R2 = {r2(x[m], y[m]):.2f}, OLS = {stats.linregress(x[m], y[m])[0]:.2f}, SD ln KI = {x[m].std(ddof=1):.2f}")
         for name, (sx, sy) in noise.items():
@@ -183,9 +215,13 @@ def lindberg(path='lindberg.csv'):
         both_ic = xc[0] != 'K'
         noise = {'within-assay': (S_REP, S_REP), 'inter-lab': (S_IC, S_IC) if both_ic else (S_KI, S_IC)}
         split = {'lower': x < -5.6, 'upper': x >= -5.6} if xc == 'Kd_CLK1' else None
+        cap = (np.log(CAP[xc]), np.log(CAP[yc]))
+        rule = km_split(lambda a, b: a.mean()) if xc == 'Kd_CLK1' else None
         print(f"\n==== {xc} vs {yc}: {nc} censored values excluded; {int((~inr).sum())} of {len(x)} usable values outside the tested range")
-        report(analyse(x, y, f'Lindberg {xc} vs {yc} (all usable)', 1.0, noise, rng, split))
-        if inr.sum() >= 7: report(analyse(x[inr], y[inr], f'Lindberg {xc} vs {yc} (within tested range)', 1.0, noise, rng))
+        report(analyse(x, y, f'Lindberg {xc} vs {yc} (all usable)', 1.0, noise, rng, split, cap=cap, split_rule=rule))
+        # the tested-range restriction is applied once, to the observed data: the within-range analysis is
+        # conditional on the observed in-range set (S7.2, S7.4), while the assay limits are still re-applied
+        if inr.sum() >= 7: report(analyse(x[inr], y[inr], f'Lindberg {xc} vs {yc} (within tested range)', 1.0, noise, rng, cap=cap))
     x, y = np.log(d.Kd_CLK1/1000), np.log(d.R_CLK1)
     print(f"\nFigure 3 as originally plotted (all {len(x)} compounds, censored values included): R2 = {r2(x.values, y.values):.2f}")
 # ---------------------------------------------------------------- all-pairs log ratio-of-ratios (Tables S3 and S5)
@@ -203,15 +239,16 @@ def ratios(vpath='vegfr.csv', lpath='lindberg.csv'):
     for lab, xc, yc in [('CLK1 KD vs radiometric', 'Kd_CLK1', 'R_CLK1'), ('DYRK1A KD vs radiometric', 'Kd_D1A', 'R_D1A'),
                         ('GSK-3b KD vs radiometric', 'Kd_GSK3B', 'R_GSK3B'), ('CLK1 radiometric vs ADP-Glo', 'R_CLK1', 'P_CLK1'),
                         ('DYRK1A radiometric vs ADP-Glo', 'R_D1A', 'P_D1A')]:
-        x, y, *_ = lindberg_pair(L, xc, yc); sets.append((lab, x, y, (S_IC, S_IC) if xc[0] == 'R' else (S_KI, S_IC)))
-    sets.insert(3, ('VEGFR KI vs IC50', np.log(V.Ki.values/1000), np.log(V.IC50.values/1000), (S_KI, S_IC)))
-    for lab, x, y, (sx, sy) in sets:
+        x, y, *_ = lindberg_pair(L, xc, yc)
+        sets.append((lab, x, y, (S_IC, S_IC) if xc[0] == 'R' else (S_KI, S_IC), (np.log(CAP[xc]), np.log(CAP[yc]))))
+    sets.insert(3, ('VEGFR KI vs IC50', np.log(V.Ki.values/1000), np.log(V.IC50.values/1000), (S_KI, S_IC), None))
+    for lab, x, y, (sx, sy), cap in sets:
         n = len(x); o = ratio_stats(pair_r(x, y)); B = []
         for _ in range(NB):
             k = rng.integers(0, n, n)
             if len(set(k)) > 3: B.append(ratio_stats(pair_r(x[k], y[k], k)))
         ci = {q: np.percentile([b[q] for b in B], [2.5, 97.5]) for q in o}
-        nul = {nm: [ratio_stats(pair_r(a, b)) for a, b in null_sets(x, y, s1, s2, rng, 1000)] for nm, (s1, s2) in [('within-assay', (S_REP, S_REP)), ('inter-lab', (sx, sy))]}
+        nul = {nm: [ratio_stats(pair_r(a, b)) for a, b in null_sets(x, y, s1, s2, rng, 1000, cap=cap)] for nm, (s1, s2) in [('within-assay', (S_REP, S_REP)), ('inter-lab', (sx, sy))]}
         print(f"\n{lab}: n = {n}, pairs = {n*(n-1)//2}")
         print(f"  median ratio-of-ratios {np.exp(o['med']):.2f}-fold [{np.exp(ci['med'][0]):.2f}, {np.exp(ci['med'][1]):.2f}]; mean r {o['mean']:.2f} [{ci['mean'][0]:.2f}, {ci['mean'][1]:.2f}]")
         print(f"  SD r {o['sd']:.2f} [{ci['sd'][0]:.2f}, {ci['sd'][1]:.2f}] (sqrt2 x SD of D = {np.sqrt(2)*(y-x).std(ddof=1):.2f}); "
@@ -221,6 +258,8 @@ def ratios(vpath='vegfr.csv', lpath='lindberg.csv'):
                   f">10-fold {q95([w['f10'] for w in v])[0]:.2f}-{q95([w['f10'] for w in v])[2]:.2f}")
 # ---------------------------------------------------------------- additional checks (rank correlations, cluster rule, IC50 averaging)
 def rank_line(x, y, k, rng, noise):
+    """Rank correlations within a fixed subset k. For cluster subsets this is conditional on the observed
+    partition (S7.4); for provenance subsets the mask is an external label and no re-derivation applies."""
     from scipy.stats import spearmanr, kendalltau
     bs = [(spearmanr(x[k][b], y[k][b])[0], kendalltau(x[k][b], y[k][b])[0]) for b in (rng.integers(0, k.sum(), k.sum()) for _ in range(NB)) if len(set(b)) > 3]
     s = f"n = {k.sum()}, R2 = {r2(x[k], y[k]):.2f}, Spearman {spearmanr(x[k], y[k])[0]:.2f} [{np.nanpercentile([b[0] for b in bs], 2.5):.2f}, {np.nanpercentile([b[0] for b in bs], 97.5):.2f}], " \
@@ -240,6 +279,14 @@ def extras(vpath='vegfr.csv', lpath='lindberg.csv'):
     for lab, k in [('upper cluster', line & ~onl), ('lower cluster', ~line & ~onl), ('lower cluster incl. OSI-632 (k-means)', ~line),
                    ('IC50 reported once', (d.stdev == 0).values), ('IC50 replicated', (d.stdev > 0).values)]:
         print(f"  {lab}: " + rank_line(x, y, k, rng, noise))
+    rule = km_split(lambda a, b: (b-a).mean())      # sensitivity (S7.4): partition re-derived per simulation
+    for nm, (sx, sy) in noise.items():
+        rk = {'lower': [], 'upper': []}
+        for xs, ys in null_sets(x, y, sx, sy, rng, 1000):
+            for lab, m in rule(xs, ys).items():
+                if m.sum() > 2: rk[lab].append(stats.spearmanr(xs[m], ys[m])[0])
+        print(f"  clusters with the rule re-applied, null {nm}: " + ', '.join(
+            f"{lab} Spearman {q95(v)[1]:.2f} [{q95(v)[0]:.2f}, {q95(v)[2]:.2f}]" for lab, v in rk.items()))
     rep = (d.stdev > 0).values; gm = d.IC50.values/np.sqrt(1 + (d.stdev.values/d.IC50.values)**2)   # log-normal geometric mean from arithmetic mean and SD
     yg = np.where(rep, np.log(gm/1000), y); Dg = yg-x
     print(f"VEGFR with geometric instead of arithmetic means for the {rep.sum()} replicated IC50 values: R2 {r2(x, yg):.2f}, Deming {deming(x, yg, (S_IC/S_KI)**2):.2f}, "
