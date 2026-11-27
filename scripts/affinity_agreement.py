@@ -173,8 +173,9 @@ def vegfr(path='vegfr.csv'):
     for c in ('Ki_rel', 'IC50_rel'):
         if c not in dall.columns: dall[c] = '='
     qual = ((dall.Ki_rel != '=') | (dall.IC50_rel != '=')).values
-    print(f'{int(qual.sum())} of {len(dall)} compounds rest on qualified records and are excluded from the '
-          f'primary analysis: ' + ', '.join(dall.compound[qual]))
+    if qual.any():
+        print(f'{int(qual.sum())} of {len(dall)} compounds rest on qualified records and are excluded from the '
+              f'primary analysis: ' + ', '.join(dall.compound[qual]))
     d = dall[~qual].reset_index(drop=True)
     x, y = np.log(d.Ki.values/1000), np.log(d.IC50.values/1000)
     lam = (S_IC/S_KI)**2; noise = {'within-assay': (S_REP, S_REP), 'inter-lab': (S_KI, S_IC)}
@@ -197,8 +198,9 @@ def vegfr(path='vegfr.csv'):
                    split_rule=km_split(lambda a, b: (b-a).mean())))
     k = ~d.compound.isin(['DIGITONIN', '2378-TCDD']).values
     report(analyse(x[k], y[k], 'VEGFR without digitonin and TCDD', lam, noise, rng, nseed=3002))
-    xa, ya = np.log(dall.Ki.values/1000), np.log(dall.IC50.values/1000)
-    report(analyse(xa, ya, 'VEGFR sensitivity: qualified records retained (n = 24)', lam, noise, rng, nseed=3003))
+    if qual.any():
+        xa, ya = np.log(dall.Ki.values/1000), np.log(dall.IC50.values/1000)
+        report(analyse(xa, ya, f'VEGFR sensitivity: qualified records retained (n = {len(dall)})', lam, noise, rng, nseed=3003))
     rep = (d.stdev > 0).values
     # these masks are external provenance labels (how often an IC50 was reported), not selections on the
     # measured values, so the observed mask is applied to each simulated dataset by construction

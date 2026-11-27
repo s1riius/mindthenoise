@@ -79,9 +79,13 @@ def lnratio(D, out):
     n, _, _ = ax.hist(D, bins=np.arange(lo, hi, BINW), color=B, edgecolor='white', linewidth=2)
     ax.axvline(0, color=G, ls=':', lw=1); ax.axvline(D.mean(), color=O, lw=2)
     top = n.max() * 1.25; ax.set_ylim(0, top)
-    ax.text(lo, top * 0.95, f'mean = {D.mean():.2f} (IC$_{{50}}$/K$_I$ = {np.exp(D.mean()):.1f})\n'
-                            f'median = {np.median(D):.2f}\nn = {len(D)}; IC$_{{50}}$ < K$_I$ for {(D < 0).sum()}',
-            fontsize=8, va='top')
+    # place the annotation on whichever side has the greater headroom, so that it never covers the bars
+    edges = np.arange(lo, hi, BINW); k = max(1, int(0.4 * len(n)))
+    right = n[-k:].max() <= n[:k].max()
+    ax.text(edges[-1] if right else lo, top * 0.95,
+            f'mean = {D.mean():.2f} (IC$_{{50}}$/K$_I$ = {np.exp(D.mean()):.1f})\n'
+            f'median = {np.median(D):.2f}\nn = {len(D)}; IC$_{{50}}$ < K$_I$ for {(D < 0).sum()}',
+            fontsize=8, va='top', ha='right' if right else 'left')
     ax.set_xlabel('ln(IC$_{50}$/K$_I$)'); ax.set_ylabel('number of compounds')
     ax.yaxis.set_major_locator(MaxNLocator(integer=True))
     fig.tight_layout(); fig.savefig(out, dpi=300); plt.close(fig)
