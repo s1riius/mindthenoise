@@ -9,7 +9,7 @@ plt.rcParams.update({'font.size': 9, 'axes.spines.top': False, 'axes.spines.righ
 vpath, lpath = (sys.argv[1], sys.argv[2]) if len(sys.argv) > 2 else ('vegfr.csv', 'lindberg.csv')
 rng = np.random.default_rng(11)
 # ------------------------------------------------ Figure S14
-d = pd.read_csv(vpath); D = np.log(d.IC50/d.Ki)
+d = A.unqualified(vpath); D = np.log(d.IC50/d.Ki)   # primary set: qualified records excluded (S9.2.2)
 fig, ax = plt.subplots(figsize=(5, 3.2)); ax.hist(D, bins=np.arange(-3.25, 3.76, 0.5), color=B, edgecolor='white', linewidth=2)
 ax.axvline(0, color=G, ls=':', lw=1); ax.axvline(D.mean(), color=O, lw=2)
 ax.text(-3.2, 5.9, f'mean = {D.mean():.2f} (IC$_{{50}}$/K$_I$ = {np.exp(D.mean()):.1f})\nmedian = {np.median(D):.2f}\nn = {len(D)}; IC$_{{50}}$ < K$_I$ for {(D < 0).sum()}', fontsize=8, va='top')
@@ -67,7 +67,7 @@ for k, (xc, yc) in enumerate(A.LIND_PAIRS):
     sds.append(np.std(yy_-xx_, ddof=1))
     if k == 0: a.legend(frameon=False, fontsize=6.5, loc='lower right')
 a = ax[7]; labs = ['CLK1 K$_D$–R', 'CLK1 K$_D$–A', 'CLK1 R–A', 'DYRK1A K$_D$–R', 'DYRK1A K$_D$–A', 'DYRK1A R–A', 'GSK-3β K$_D$–R']
-yy = np.arange(len(sds))[::-1]; a.axvspan(0.41, 0.92, color=T, alpha=0.18, lw=0, label='within-assay null (95%)'); a.axvspan(1.3, 2.9, color=O, alpha=0.15, lw=0, label='inter-laboratory null (95%)')
+yy = np.arange(len(sds))[::-1]; a.axvspan(0.41, 0.87, color=T, alpha=0.18, lw=0, label='within-assay null (95%)'); a.axvspan(1.16, 2.75, color=O, alpha=0.15, lw=0, label='inter-laboratory null (95%)')
 a.scatter(sds, yy, color=B, s=36, zorder=3, label='observed'); a.set_yticks(yy); a.set_yticklabels(labs, fontsize=7.5); a.set_xlabel('SD of ln(y/x)'); a.set_xlim(0, 3.2)
 a.set_title('Scatter vs. noise scales', loc='left', fontsize=8.5, fontweight='bold'); a.legend(frameon=False, fontsize=6.5, loc='upper center', bbox_to_anchor=(0.5, -0.3), ncol=2)
 fig.tight_layout(); fig.savefig('FigS18.png', dpi=300)

@@ -166,7 +166,16 @@ def report(o):
         for name, d in nul.items(): print(f"    null {name}: " + ', '.join(f"{k} [{v[0]:.2f}, {v[2]:.2f}]" for k, v in d.items()))
 # ---------------------------------------------------------------- datasets
 def vegfr(path='vegfr.csv'):
-    d = pd.read_csv(path); rng = np.random.default_rng(2026)
+    """Primary analysis excludes records that ChEMBL reports as bounds rather than determinations
+    (Ki_rel or IC50_rel other than '='), leaving n = 20; the full n = 24 set, which retains them, is
+    reported afterwards as a sensitivity analysis (S9.2.2). The qualifiers are kept in vegfr.csv."""
+    dall = pd.read_csv(path); rng = np.random.default_rng(2026)
+    for c in ('Ki_rel', 'IC50_rel'):
+        if c not in dall.columns: dall[c] = '='
+    qual = ((dall.Ki_rel != '=') | (dall.IC50_rel != '=')).values
+    print(f'{int(qual.sum())} of {len(dall)} compounds rest on qualified records and are excluded from the '
+          f'primary analysis: ' + ', '.join(dall.compound[qual]))
+    d = dall[~qual].reset_index(drop=True)
     x, y = np.log(d.Ki.values/1000), np.log(d.IC50.values/1000)
     lam = (S_IC/S_KI)**2; noise = {'within-assay': (S_REP, S_REP), 'inter-lab': (S_KI, S_IC)}
     line = y > 3 + (-10/10.6)*(x + 9)                      # dashed blue line of Figure 4, through (-9, 3) and (1.6, -7)
@@ -188,6 +197,8 @@ def vegfr(path='vegfr.csv'):
                    split_rule=km_split(lambda a, b: (b-a).mean())))
     k = ~d.compound.isin(['DIGITONIN', '2378-TCDD']).values
     report(analyse(x[k], y[k], 'VEGFR without digitonin and TCDD', lam, noise, rng, nseed=3002))
+    xa, ya = np.log(dall.Ki.values/1000), np.log(dall.IC50.values/1000)
+    report(analyse(xa, ya, 'VEGFR sensitivity: qualified records retained (n = 24)', lam, noise, rng, nseed=3003))
     rep = (d.stdev > 0).values
     # these masks are external provenance labels (how often an IC50 was reported), not selections on the
     # measured values, so the observed mask is applied to each simulated dataset by construction
@@ -239,7 +250,7 @@ def ratio_stats(r):
     a = np.abs(r)
     return dict(med=np.median(r), mean=r.mean(), sd=r.std(ddof=1), f2=(a > np.log(2)).mean(), f10=(a > np.log(10)).mean())
 def ratios(vpath='vegfr.csv', lpath='lindberg.csv'):
-    rng = np.random.default_rng(2029); L = pd.read_csv(lpath); V = pd.read_csv(vpath); sets = []
+    rng = np.random.default_rng(2029); L = pd.read_csv(lpath); V = unqualified(vpath); sets = []
     for lab, xc, yc in [('CLK1 KD vs radiometric', 'Kd_CLK1', 'R_CLK1'), ('DYRK1A KD vs radiometric', 'Kd_D1A', 'R_D1A'),
                         ('GSK-3b KD vs radiometric', 'Kd_GSK3B', 'R_GSK3B'), ('CLK1 radiometric vs ADP-Glo', 'R_CLK1', 'P_CLK1'),
                         ('DYRK1A radiometric vs ADP-Glo', 'R_D1A', 'P_D1A')]:
@@ -271,11 +282,17 @@ def rank_line(x, y, k, rng, noise, nseed=3500):
     for nm, (sx, sy) in noise.items():
         v = q95([spearmanr(a[k], b[k])[0] for a, b in null_sets(x, y, sx, sy, np.random.default_rng(nseed), 1000)]); s += f"; null {nm} Spearman {v[1]:.2f} [{v[0]:.2f}, {v[2]:.2f}]"
     return s
+def unqualified(path):
+    """the primary VEGFR set: compounds whose Ki and IC50 are determinations, not bounds (S9.2.2)"""
+    d = pd.read_csv(path)
+    for c in ('Ki_rel', 'IC50_rel'):
+        if c not in d.columns: d[c] = '='
+    return d[(d.Ki_rel == '=') & (d.IC50_rel == '=')].reset_index(drop=True)
 def extras(vpath='vegfr.csv', lpath='lindberg.csv'):
     from sklearn.cluster import KMeans
     from sklearn.mixture import GaussianMixture as GM
     rng = np.random.default_rng(2028)
-    d = pd.read_csv(vpath); x, y = np.log(d.Ki.values/1000), np.log(d.IC50.values/1000)
+    d = unqualified(vpath); x, y = np.log(d.Ki.values/1000), np.log(d.IC50.values/1000)
     noise = {'within-assay': (S_REP, S_REP), 'inter-lab': (S_KI, S_IC)}
     line = y > 3 + (-10/10.6)*(x + 9); onl = (d.compound == 'OSI-632').values
     km = KMeans(2, n_init=20, random_state=0).fit_predict(np.c_[x, y]); up = km == km[np.argmax(line)]
@@ -297,6 +314,7 @@ def extras(vpath='vegfr.csv', lpath='lindberg.csv'):
           f"bias {Dg.mean():.2f} ({np.exp(Dg.mean()):.1f}-fold), SD {Dg.std(ddof=1):.2f}, CCC {ccc(x, yg):.2f}, Spearman {stats.spearmanr(x, yg)[0]:.2f}, n(IC50<KI) {(Dg < 0).sum()}; "
           f"largest shift {np.max(y-yg):.2f} ln units")
     L = pd.read_csv(lpath)
+    rng = np.random.default_rng(2050)   # own stream: the Lindberg block must not depend on the VEGFR block
     for xc, yc in [('Kd_CLK1', 'R_CLK1'), ('Kd_CLK1', 'P_CLK1')]:
         x, y, *_ = lindberg_pair(L, xc, yc); vis = x < -5.6
         km = KMeans(2, n_init=20, random_state=0).fit_predict(np.c_[x, y]); lo = km == km[np.argmin(x)]
